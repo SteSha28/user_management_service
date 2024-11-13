@@ -27,7 +27,7 @@
 ### 1. Клонирование репозитория
 
 ```bash
-git clone https://github.com/yourusername/user_management.git
+git clone https://github.com/SteSha28/user_management_service.git
 cd user_management
 python3 -m venv venv
 source venv/bin/activate  # Для Windows используйте venv\Scripts\activate
