@@ -18,10 +18,16 @@ class User(Base):
     gender = Column(String(20), nullable=False, default="not_specified")
     profile_image = Column(String, nullable=True)
     description = Column(Text, nullable=True)
-    source_id = Column(Integer, ForeignKey("source_users.id",
-                                           ondelete="SET NULL"), nullable=True)
-    role_id = Column(Integer, ForeignKey("role.id",
-                                         ondelete="SET NULL"), nullable=True)
+    source_id = Column(Integer,
+                       ForeignKey("source_users.id",
+                                  ondelete="SET NULL"),
+                       nullable=True,
+                       default=1)
+    role_id = Column(Integer,
+                     ForeignKey("role.id",
+                                ondelete="SET NULL"),
+                     nullable=True,
+                     default=1)
 
     source = relationship("Source_user",
                           back_populates="user",

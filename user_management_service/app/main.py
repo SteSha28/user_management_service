@@ -53,8 +53,7 @@ async def create_user(user: schemas.UserCreate,
                       db: Session = Depends(get_db)):
     detail = await crud.check_if_user_exists(db, user)
     if detail:
-        raise HTTPException(status_code=400,
-                            detail=detail)
+        raise HTTPException(status_code=400, detail=detail)
     user.password = hash_password(user.password)
     new_user = await crud.create_user(db, user=user)
     return new_user
@@ -82,8 +81,7 @@ async def read_user(user_id: int,
                     db: Session = Depends(get_db)):
     user = await crud.get_user_by_id(db, user_id=user_id)
     if not user:
-        raise HTTPException(status_code=404,
-                            detail="User not found")
+        raise HTTPException(status_code=404, detail="User not found")
     return user
 
 
@@ -102,6 +100,25 @@ async def update_user(user_id: int,
         raise HTTPException(status_code=403, detail='Forbidden')
 
 
+@app.put("/users/{user_id}/reset-password/", response_model=schemas.User)
+async def reset_user_password(user_id: int,
+                              user_update: schemas.PasswordUpdate,
+                              user_token_id: int = Depends(get_current_user),
+                              db: Session = Depends(get_db)):
+    if user_id == user_token_id:
+        user = await crud.get_user_by_id(db, user_id=user_token_id)
+        if not verify_password(user_update.last_password, user.password):
+            raise HTTPException(status_code=401, detail='Uncorrect password')
+        user = await crud.update_pasword(db=db, user=user,
+                                         new_password=hash_password(
+                                             user_update.password))
+        if user is None:
+            raise HTTPException(status_code=404, detail="User not found")
+        return user
+    else:
+        raise HTTPException(status_code=403, detail='Forbidden')
+
+
 @app.delete("/users/{user_id}/",
             status_code=status.HTTP_204_NO_CONTENT)
 async def delete_user(user_id: int,
@@ -110,8 +127,7 @@ async def delete_user(user_id: int,
     if user_id == user_token_id:
         user = await crud.delete_user(db, user_id=user_id)
         if user is None:
-            raise HTTPException(status_code=404,
-                                detail="User not found")
+            raise HTTPException(status_code=404, detail="User not found")
         return
     else:
         raise HTTPException(status_code=403, detail='Forbidden')

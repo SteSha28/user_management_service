@@ -13,8 +13,8 @@ class UserCreate(UserBase):
 
 
 class PasswordUpdate(BaseModel):
-    email: EmailStr
-    new_password: str
+    last_password: str
+    password: str
 
 
 class UserInfo(BaseModel):

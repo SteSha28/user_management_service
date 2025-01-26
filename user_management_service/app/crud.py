@@ -52,3 +52,12 @@ async def update_user(db: Session,
     db.commit()
     db.refresh(user)
     return user
+
+
+async def update_pasword(db: Session,
+                         user: models.User,
+                         new_password: str):
+    setattr(user, "password", new_password)
+    db.commit()
+    db.refresh(user)
+    return user
