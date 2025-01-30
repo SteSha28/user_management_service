@@ -54,7 +54,7 @@ async def update_user(db: Session,
     return user
 
 
-async def update_pasword(db: Session,
+async def update_password(db: Session,
                          user: models.User,
                          new_password: str):
     setattr(user, "password", new_password)

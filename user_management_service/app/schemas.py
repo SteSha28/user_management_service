@@ -9,12 +9,18 @@ class UserBase(BaseModel):
 
 
 class UserCreate(UserBase):
+    # confirm_code: str
     password: str
 
 
 class PasswordUpdate(BaseModel):
+    confirm_code: str
     last_password: str
     password: str
+
+
+class UserRecovery(BaseModel):
+    email: EmailStr
 
 
 class UserInfo(BaseModel):
