@@ -122,7 +122,8 @@ async def login(request: Request,
     token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     return {"Authorization": create_jwt_token(data={"id": user.id},
                                               expires_delta=token_expires),
-            "token_type": "Bearer"}
+            "token_type": "Bearer",
+            "id": user.id}
 
 
 @app.get("/users/{user_id}/",
